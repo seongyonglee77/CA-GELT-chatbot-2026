@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Audio-first conversation practice with Hana Mori in Japanese / Japan.">
+  <title>Hana Mori · Global Englishes</title>
+  <link rel="stylesheet" href="../../styles.css">
+  <script src="../../persona.js" defer></script>
+</head>
+<body data-persona-id="icnale_jpn_002_student" data-display-name="Hana Mori" data-voice-id="icnale_jpn_002_student_voice">
+  <a class="skip-link" href="#session-panel">Skip to session controls</a>
+
+  <header class="site-header persona-header">
+    <div class="shell header-inner">
+      <a class="back-link" href="../../index.html"><span aria-hidden="true">←</span> Back to studio</a>
+      <a class="wordmark" href="../../index.html" aria-label="Global Englishes home">
+        <span class="wordmark-mark" aria-hidden="true">WE</span>
+        <span>Global Englishes</span>
+      </a>
+      <span class="voice-label">ICNALE · JPN-002</span>
+    </div>
+  </header>
+
+  <main id="main-content" class="shell conversation-page">
+    <div class="audio-stage">
+      <section class="identity-panel" aria-labelledby="page-title">
+        <p class="identity-kicker">Japan · English communication</p>
+        <div class="persona-orb" aria-hidden="true"><span class="orb-monogram">H</span></div>
+        <div class="identity-heading">
+          <h1 id="page-title" data-persona-display>Hana Mori</h1>
+        </div>
+        <p class="identity-meta">Japanese English learning context · classroom partner</p>
+        <p class="identity-copy">Practise an audio-first conversation with Hana Mori about daily English communication, books, subtitles, and writing-related work. Hana prefers one-to-one conversation and keeps responses short, concrete, and supportive.</p>
+        <p class="audio-note audio-note-stage" role="note"><span class="audio-note-icon" aria-hidden="true">◉</span><span><strong>Listen and speak</strong> · Transcripts are not displayed on screen.</span></p>
+      </section>
+
+      <section id="session-panel" class="session-panel" aria-labelledby="controls-heading">
+        <p class="session-label">Private audio stage</p>
+        <h2 id="controls-heading">Set your starting point</h2>
+        <p class="session-copy">Choose your degree level and enter your student ID. Your ID is cleared from the form when the session starts.</p>
+
+        <form id="onboarding-form" class="onboarding-form" novalidate>
+          <label class="field-label" for="degree-level">Degree level
+            <select id="degree-level" class="field-control" name="degree-level" required>
+              <option value="">Select degree level</option>
+              <option value="undergraduate">Undergraduate</option>
+              <option value="graduate">Graduate</option>
+            </select>
+          </label>
+          <label class="field-label" for="student-id">Student ID
+            <input id="student-id" class="field-control" name="student-id" type="text" autocomplete="off" maxlength="128" required>
+          </label>
+          <p class="form-note">Session details stay in this browser session.</p>
+          <button id="start-button" class="conversation-button" type="submit">Start conversation</button>
+        </form>
+
+        <div class="session-control-row">
+          <button id="stop-button" class="conversation-button stop-button" type="button" disabled>Stop session</button>
+          <p id="status" class="stage-status" role="status">Complete the setup to connect.</p>
+        </div>
+
+        <div class="status-grid" aria-live="polite" aria-label="Conversation status">
+          <div class="status-item"><span class="status-label">Connection</span><strong id="connection-state" class="status-value">Not started</strong></div>
+          <div class="status-item"><span class="status-label">Elapsed</span><time id="elapsed" class="status-value" datetime="PT0S">00:00</time></div>
+          <div class="status-item"><span class="status-label">Microphone</span><strong id="microphone-state" class="status-value">Off</strong></div>
+          <div class="status-item"><span class="status-label">Speaker</span><strong id="speaker-state" class="status-value">Idle</strong></div>
+        </div>
+        <audio id="audio-player" hidden preload="none" aria-label="Hana Mori audio response"></audio>
+        <p id="error-message" class="error-message" role="alert" hidden></p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>Global Englishes Studio · Model 1</p>
+      <p>Audio-first practice with Hana Mori.</p>
+    </div>
+  </footer>
+</body>
+</html>

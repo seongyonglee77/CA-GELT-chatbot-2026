@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+.deepgram_resources/
+docs/*apiKey*.csv
+**/*apiKey*.csv
+__pycache__/
+*.py[cod]

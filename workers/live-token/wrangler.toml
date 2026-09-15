@@ -3,5 +3,11 @@ main = "src/index.js"
 compatibility_date = "2026-09-15"
 workers_dev = true
 
-# Set ALLOWED_ORIGIN in the Cloudflare dashboard after the public frontend URL exists.
-# Keep DEEPGRAM_API_KEY as an encrypted Worker Secret; never put it in this file.
+[assets]
+directory = "../../apps/model1_web/static"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+run_worker_first = true
+
+# DEEPGRAM_API_KEY is already registered as an encrypted Worker Secret.
+# Set ALLOWED_ORIGIN to the final public origin before production use.

@@ -693,6 +693,10 @@
     studentIdInput.value = "";
     onboarding.hidden = true;
     resetAudioStream();
+    // Create and resume the PCM playback context inside the submit gesture.
+    // Mobile browsers may block an AudioContext created only after the first
+    // asynchronous provider audio chunk arrives.
+    ensurePlaybackAudioContext();
     state.dropAudioUntilAgent = false;
     window.clearTimeout(state.dropAudioTimer);
     setStatus("Connecting");

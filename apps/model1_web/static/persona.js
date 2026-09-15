@@ -509,11 +509,11 @@
 
   function interruptAudioPlayback() {
     resetAudioStream();
-    state.dropAudioUntilAgent = true;
+    // Deepgram may deliver the first assistant audio chunk before an
+    // AgentStartedSpeaking event. Never discard that first chunk: stopping
+    // the already-scheduled sources is sufficient for barge-in.
+    state.dropAudioUntilAgent = false;
     window.clearTimeout(state.dropAudioTimer);
-    state.dropAudioTimer = window.setTimeout(() => {
-      state.dropAudioUntilAgent = false;
-    }, 3000);
     setSpeakerState("Idle");
   }
 
@@ -628,7 +628,6 @@
         }
         break;
       case "audio_chunk":
-        if (state.dropAudioUntilAgent) break;
         if (isRawPcmFormat(event.audio_format)) {
           enqueuePcmAudio(event.data, event.audio_format.sample_rate);
         } else {

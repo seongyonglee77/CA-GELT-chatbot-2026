@@ -615,6 +615,16 @@
         if (event.audio_input_supported === false) {
           setMicrophoneState("Unavailable");
           setError("The server does not currently accept microphone audio.");
+        } else if (!state.capturing && state.socket) {
+          void startRecorder().then((recorderStarted) => {
+            if (!recorderStarted && state.socket && state.socket.readyState === WebSocket.OPEN) {
+              state.stopping = true;
+              state.socket.send(JSON.stringify({ type: "stop" }));
+              stopButton.disabled = true;
+              stopElapsed();
+              setStatus("Processing");
+            }
+          });
         }
         break;
       case "audio_chunk":
@@ -732,14 +742,6 @@
         return;
       }
       stopButton.disabled = false;
-      const recorderStarted = await startRecorder();
-      if (!recorderStarted && state.socket === socket && socket.readyState === WebSocket.OPEN) {
-        state.stopping = true;
-        socket.send(JSON.stringify({ type: "stop" }));
-        stopButton.disabled = true;
-        stopElapsed();
-        setStatus("Processing");
-      }
     });
     socket.addEventListener("message", (message) => {
       if (state.socket !== socket) return;

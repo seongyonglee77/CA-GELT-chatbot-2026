@@ -133,10 +133,7 @@ export default {
     if (url.pathname === "/api/live-token" && request.method === "GET") return issueToken(request, env);
     if (request.headers.get("Upgrade")?.toLowerCase() === "websocket") return relay(request, env);
     if (env.ASSETS) {
-      const assetUrl = new URL(request.url);
-      if (assetUrl.pathname === "/") assetUrl.pathname = "/index.html";
-      else if (assetUrl.pathname.endsWith("/")) assetUrl.pathname += "index.html";
-      return env.ASSETS.fetch(new Request(assetUrl, request));
+      return env.ASSETS.fetch(request);
     }
     return json(request, env, { error: "Not found" }, { status: 404 });
   }

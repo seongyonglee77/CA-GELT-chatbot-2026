@@ -24,8 +24,13 @@ function fromBase64(value) {
   return bytes;
 }
 
-function toBase64(value) {
-  const bytes = new Uint8Array(value);
+async function toBase64(value) {
+  let buffer = value;
+  if (value instanceof Blob) buffer = await value.arrayBuffer();
+  if (ArrayBuffer.isView(buffer)) {
+    buffer = buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
+  }
+  const bytes = new Uint8Array(buffer);
   let result = "";
   const chunkSize = 0x8000;
   for (let index = 0; index < bytes.length; index += chunkSize) {
@@ -68,9 +73,9 @@ async function relay(request, env) {
         if (!upstream) return send({ type: "error", message: "Unable to connect to Deepgram Agent" });
         upstream.accept();
         started = true;
-        upstream.addEventListener("message", (upstreamEvent) => {
+        upstream.addEventListener("message", async (upstreamEvent) => {
           if (typeof upstreamEvent.data !== "string") {
-            send({ type: "audio_chunk", data: toBase64(upstreamEvent.data), audio_format: AUDIO_FORMAT });
+            send({ type: "audio_chunk", data: await toBase64(upstreamEvent.data), audio_format: AUDIO_FORMAT });
             return;
           }
           let provider;

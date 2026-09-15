@@ -1,4 +1,4 @@
-name = "ca-gelt-deepgram-token-2026"
+name = "ca-gelt-chatbot"
 main = "src/index.js"
 compatibility_date = "2026-09-15"
 workers_dev = true

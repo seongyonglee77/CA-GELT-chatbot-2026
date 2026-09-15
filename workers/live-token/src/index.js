@@ -73,14 +73,16 @@ async function relay(request, env) {
         if (!upstream) return send({ type: "error", message: "Unable to connect to Deepgram Agent" });
         upstream.accept();
         started = true;
-        upstream.addEventListener("message", async (upstreamEvent) => {
-          if (typeof upstreamEvent.data !== "string") {
-            send({ type: "audio_chunk", data: await toBase64(upstreamEvent.data), audio_format: AUDIO_FORMAT });
-            return;
-          }
-          let provider;
-          try { provider = JSON.parse(upstreamEvent.data); } catch { return; }
-          switch (provider.type) {
+        let upstreamMessageQueue = Promise.resolve();
+        upstream.addEventListener("message", (upstreamEvent) => {
+          upstreamMessageQueue = upstreamMessageQueue.then(async () => {
+            if (typeof upstreamEvent.data !== "string") {
+              send({ type: "audio_chunk", data: await toBase64(upstreamEvent.data), audio_format: AUDIO_FORMAT });
+              return;
+            }
+            let provider;
+            try { provider = JSON.parse(upstreamEvent.data); } catch { return; }
+            switch (provider.type) {
             case "Welcome":
               upstream.send(JSON.stringify(settings));
               break;
@@ -110,7 +112,8 @@ async function relay(request, env) {
               break;
             default:
               send({ type: "status", status: String(provider.type || "provider_event").slice(0, 80) });
-          }
+            }
+          }).catch(() => send({ type: "error", message: "Audio stream processing failed" }));
         });
         upstream.addEventListener("close", () => { if (browser.readyState === WebSocket.OPEN) send({ type: "stopped" }); });
         upstream.addEventListener("error", () => send({ type: "error", message: "Deepgram Agent connection failed" }));

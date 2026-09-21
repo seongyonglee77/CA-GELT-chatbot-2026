@@ -6,6 +6,7 @@ import json
 import queue
 import threading
 import time
+from pathlib import Path
 
 import pytest
 
@@ -89,6 +90,39 @@ def test_settings_select_voice_and_layered_prompt():
         "sample_rate": 24000,
         "container": "none",
     }
+    session.stop()
+
+
+@pytest.mark.parametrize(
+    ("persona_id", "voice_model", "settings_filename"),
+    [
+        ("deepgram_hannah", "flux-hannah-en", "deepgram_Hannah_code.json"),
+        ("deepgram_naveen", "flux-naveen-en", "deepgram_Naveen_code.json"),
+    ],
+)
+def test_new_persona_settings_use_raw_source_and_rebuilt_prompt(
+    persona_id: str,
+    voice_model: str,
+    settings_filename: str,
+):
+    socket = FakeProviderSocket()
+    source_path = Path(__file__).parents[1] / "prompts" / "raw_materials" / settings_filename
+    source_before = source_path.read_bytes()
+    session = DeepgramVoiceAgentSession(
+        profile(persona_id),
+        DeepgramAgentConfig("test-key"),
+        websocket_factory=lambda url, header=None: socket,
+    )
+
+    session.start()
+    settings = json.loads(socket.sent[0][0])
+    assert settings["agent"]["speak"]["provider"]["model"] == voice_model
+    assert settings["agent"]["listen"]["provider"]["model"] == "flux-general-en"
+    assert settings["agent"]["think"]["provider"]["model"] == "gemini-3.1-flash-lite"
+    assert "# Layer 1" in settings["agent"]["think"]["prompt"]
+    assert "# Layer 2" in settings["agent"]["think"]["prompt"]
+    assert "# Layer 3" in settings["agent"]["think"]["prompt"]
+    assert source_path.read_bytes() == source_before
     session.stop()
 
 

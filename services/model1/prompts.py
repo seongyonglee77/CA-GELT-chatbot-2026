@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Any, Mapping
 
 
-_ASSET_ROOT = Path(__file__).resolve().parents[2] / "prompts" / "voice_agents"
+_ASSET_ROOT = Path(__file__).resolve().parents[2] / "prompts" / "voice_agents_system-prompt"
 
 
 def _read_asset(filename: str) -> str:

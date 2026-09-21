@@ -1445,3 +1445,106 @@ Part E: 메모/리스크 갱신
 - 상세 페이지 title도 `Global Englishes`로 통일했다.
 - 실제 localhost Kit/Kai 페이지 렌더링과 전체 Python tests **55 passed**를
   확인했다.
+
+### 2026-09-20 — Persona register scope correction
+
+- Google Sheet `주차별 AI 페르소나`는 대화 챗봇 전사 저장소가 아니라
+  주차별 persona provenance/register 전용이라는 사용자 확인을 반영했다.
+- `apps-script/PersonaWeeklyCode.gs`에서 `Sessions`와 `AgentTranscript` 생성·
+  저장 로직을 제거했다. 이 두 탭은 기존 `apps-script/Code.gs`의 legacy
+  session/transcript 저장용이며 persona register endpoint에서는 사용하지 않는다.
+- Persona register의 `doGet`은 `action=sync_personas&week=...` 요청만으로
+  Kit/Kai 행을 생성·갱신하고, `doPost`는 `type=sync_personas` 요청만 받도록
+  범위를 축소했다. 기존 Google Sheet에 남아 있는 Sessions/AgentTranscript
+  탭은 코드가 자동 삭제하지 않는다.
+- 기술보고서의 2026-09-20 기록도 같은 범위로 정정했다.
+
+### 2026-09-20 — Persona register deployment verification
+
+- 사용자가 `PersonaWeeklyCode.gs`의 새 Web App 배포를 완료했다고 보고했다.
+- 제공된 `/exec` URL과 `action=sync_personas&week=3주차` 요청을 외부에서
+  확인했으나 모두 HTTP 404 `Page not found`를 반환했다.
+- 따라서 현재 해당 URL에서 persona register sync가 실행되었다고 주장하지
+  않으며, 이번 확인으로 Google Sheet 데이터가 변경되었다고도 기록하지 않는다.
+
+### 2026-09-20 — Persona register deployment verified
+
+- 배포 화면의 정확한 deployment ID는 끝에 `w`가 포함된
+  `...I4G6SVnA8w`였고, 이 정확한 `/exec` URL로 재확인했다. 앞선 404는
+  끝의 `w`가 빠진 URL을 호출한 데서 발생했다.
+- `GET /exec`가 `success: true`, `service: weekly-ai-persona-store`를
+  반환했다.
+- `GET /exec?action=sync_personas&week=3주차`를 실행해 `Sheet1`의 Kit과
+  Kai 행을 모두 `updated` 상태로 갱신했다.
+
+### 2026-09-20 — Deepgram Hannah/Naveen persona integration
+
+- 사용자가 `prompts/raw_materials/`에 추가한
+  `deepgram_Hannah_code.json`, `deepgram_Naveen_code.json`과
+  `Hannah.png`, `Naveen.png`를 새 classroom persona source로 지정했다.
+- `voices/personas/deepgram_hannah.json`과
+  `voices/personas/deepgram_naveen.json`을 생성하고
+  `voices/personas/registry.json`에 `deepgram_hannah`,
+  `deepgram_naveen`을 등록했다. 두 profile은 Deepgram hosted voice
+  metadata와 fictionalized classroom biography를 분리한다.
+- `prompts/voice_agents_system-prompt/deepgram_hannah.md`와
+  `deepgram_naveen.md`를 추가했다. 두 파일은 Layer 1 → Layer 2 →
+  persona-specific Layer 3 구조를 따른다.
+- `services/model1/deepgram_agent.py`에 두 raw settings와
+  `flux-hannah-en`/`flux-naveen-en`을 등록하고,
+  `services/model1/prompts.py`가 실제
+  `voice_agents_system-prompt` 폴더를 읽도록 수정했다.
+- 두 persona를 `apps/model1_web/server.py`의 integrated Deepgram Agent
+  Model 1 경로에 등록했다. profile image와 static route도 추가했다.
+- `apps-script/PersonaWeeklyCode.gs`의 weekly catalog에 두 persona를
+  추가했다. 현재 classroom persona 네 개는 모두 Model 1이다.
+- 검증: 전체 Python tests **57 passed**, JavaScript syntax,
+  Apps Script syntax, 새 JSON parsing을 통과했다.
+
+### 2026-09-21 — Deepgram voice provenance and weekly register update
+
+- `voices/voice-sources.md`의 Deepgram Flux hosted classroom voice 표에
+  `DEEPGRAM_FLUX_HANNAH_EN`과 `DEEPGRAM_FLUX_NAVEEN_EN`을 추가했다.
+  두 source는 provider-hosted voice이며 identity clone이 아니고,
+  `RIGHTS_PENDING`으로 유지한다.
+- Hannah/Naveen의 fictionalized biography와 interaction style은
+  `voices/personas/` profile과 Layer 3 prompt에서 관리하고, raw provider
+  settings와 avatar image는 source material/visual asset으로 분리했다.
+- 사용자가 제공한 Apps Script `/exec`에
+  `action=sync_personas&week=3주차`를 실행했다. 응답은 `success: true`였지만
+  `deepgram_kit`과 `deepgram_kai`만 `updated`로 반환되었고 Hannah/Naveen은
+  반환되지 않았다. 따라서 현재 배포본에는 아직 새 두 catalog entry가
+  반영되지 않은 것으로 판정하며, Sheet에 두 행이 추가되었다고 주장하지 않는다.
+
+### 2026-09-21 — Weekly register cache-bypass verification
+
+- 동일한 정확한 deployment URL의 이전 응답이 stale cached response였음을
+  확인했다. cache-busting query parameter를 붙여 새 실행을 강제했다.
+- 최신 응답은 `success: true`, sheet `주차별_로그`, week `3주차`였고,
+  `deepgram_kit`/`deepgram_kai`는 `updated`,
+  `deepgram_hannah`/`deepgram_naveen`은 `inserted`로 반환됐다.
+- 따라서 Hannah와 Naveen의 3주차 persona 정보가 Google Sheet에 실제로
+  추가된 것으로 기록한다.
+
+### 2026-09-20 — Weekly classroom AI-persona Google Sheets register
+
+- Added the separate Apps Script deployment source
+  `apps-script/PersonaWeeklyCode.gs`; existing `Sessions` and
+  `AgentTranscript` endpoints remain separate from `apps-script/Code.gs`.
+- The weekly sheet workflow locates the persona sheet by configured
+  `PERSONA_SHEET_NAME`, exact `주차별 AI 페르소나`, or row-5 base headers, then
+  fills/replaces G:Y while preserving A:F. A `session_start` upserts a
+  deduplicated week + Model 1 + persona row, and `sync_personas` seeds or
+  updates the current Kit/Kai catalog.
+- Classroom default is Model 1 / Deepgram Voice Agent. New personas require
+  explicit instruction plus catalog and application/provider mapping updates.
+- Recorded the user-provided endpoint
+  `https://script.google.com/macros/s/AKfycbzUwJatfsdDExxm5fUZlwg62FN8r-Z2D_IPLqVOnZwCn_ePh-72LAv7dmBlI4G6SVnA8/exec`;
+  deployment status was not independently verified. `doGet` handles the
+  one-time `action=sync_personas&week=...` request and `doPost` handles
+  `session_start`/`agent_turn` storage updates. Deployment must use the new
+  file as the endpoint source rather than combining duplicate handlers with
+  the old `Code.gs`.
+- The script embeds Kit/Kai metadata because Apps Script cannot read local
+  repository JSON at runtime. Syntax parsing passed with `new Function(...)`;
+  Apps Script deployment was not executed from this repository.

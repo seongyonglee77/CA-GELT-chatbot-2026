@@ -63,7 +63,12 @@ def _default_session_factory(
     # Deepgram classroom personas are always routed through the integrated
     # listen/think/speak Agent when explicitly enabled.  They must never enter
     # the legacy Qwen/CosyVoice cascade.
-    if persona_id in {"deepgram_kit", "deepgram_kai"}:
+    if persona_id in {
+        "deepgram_kit",
+        "deepgram_kai",
+        "deepgram_hannah",
+        "deepgram_naveen",
+    }:
         if isinstance(config, DeepgramAgentConfig) or deepgram_agent_enabled():
             return DeepgramVoiceAgentSession(
                 profile,

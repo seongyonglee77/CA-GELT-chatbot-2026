@@ -28,12 +28,16 @@ from .prompts import build_layered_system_prompt
 DEEPGRAM_AGENT_ENDPOINT = "wss://agent.deepgram.com/v1/agent/converse"
 _SETTINGS_ROOT = Path(__file__).resolve().parents[2] / "prompts"
 _PERSONA_SETTINGS = {
-    "deepgram_kit": "deepgram_kit_code.json",
-    "deepgram_kai": "deepgram_kai_code.json",
+    "deepgram_kit": "raw_materials/deepgram_kit_code.json",
+    "deepgram_kai": "raw_materials/deepgram_kai_code.json",
+    "deepgram_hannah": "raw_materials/deepgram_Hannah_code.json",
+    "deepgram_naveen": "raw_materials/deepgram_Naveen_code.json",
 }
 _VOICE_MODELS = {
     "deepgram_kit": "flux-kit-en",
     "deepgram_kai": "flux-kai-en",
+    "deepgram_hannah": "flux-hannah-en",
+    "deepgram_naveen": "flux-naveen-en",
 }
 _LISTEN_MODEL = "flux-general-en"
 _THINK_MODEL = "gemini-3.1-flash-lite"

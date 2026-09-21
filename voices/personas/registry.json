@@ -1,0 +1,12 @@
+{
+  "schema_version": "persona-registry.v1",
+  "personas": {
+    "icnale_chn_004_student": "icnale_chn_004_student.json",
+    "icnale_idn_001_student": "icnale_idn_001_student.json",
+    "icnale_jpn_002_student": "icnale_jpn_002_student.json",
+    "deepgram_kit": "deepgram_kit.json",
+    "deepgram_kai": "deepgram_kai.json",
+    "deepgram_hannah": "deepgram_hannah.json",
+    "deepgram_naveen": "deepgram_naveen.json"
+  }
+}

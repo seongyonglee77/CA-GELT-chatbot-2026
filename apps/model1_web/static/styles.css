@@ -397,6 +397,25 @@ a {
   letter-spacing: -.11em;
 }
 
+.persona-card-image {
+  display: block;
+  width: 105px;
+  flex: 0 0 105px;
+  min-height: 100%;
+  padding: 8px;
+  object-fit: contain;
+  object-position: center bottom;
+  background: linear-gradient(145deg, rgba(116, 231, 239, .18), rgba(20, 48, 89, .72));
+}
+
+.card-image-hannah {
+  background: linear-gradient(145deg, rgba(245, 165, 205, .72), rgba(94, 47, 113, .8));
+}
+
+.card-image-naveen {
+  background: linear-gradient(145deg, rgba(145, 239, 195, .64), rgba(24, 72, 84, .84));
+}
+
 .monogram-kai {
   background: linear-gradient(145deg, var(--mint), #57bda2);
 }
@@ -998,6 +1017,12 @@ a {
     width: 78px;
     flex-basis: 78px;
     font-size: 2.6rem;
+  }
+
+  .persona-card-image {
+    width: 78px;
+    flex-basis: 78px;
+    padding: 5px;
   }
 
   .persona-card-content {

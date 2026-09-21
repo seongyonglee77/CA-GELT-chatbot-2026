@@ -1550,6 +1550,21 @@ Part E: 메모/리스크 갱신
 - 이미지 asset은 persona identity의 증거가 아니라 fictionalized classroom
   visual asset으로 취급한다.
 
+### 2026-09-21 — Cloudflare four-persona production deployment
+
+- `workers/live-token/src/index.js`를 현재 구조에 맞춰 갱신했다. Kit/Kai/
+  Hannah/Naveen 네 raw settings와 각 Layer 1–3 system prompt를 Worker
+  deployment bundle에 연결하고, raw settings는 변경하지 않았다.
+- `workers/live-token/wrangler.toml`의 static `ASSETS` binding을 기준으로
+  `apps/model1_web/static/`과 Worker relay를 함께 `ca-gelt-chatbot`에
+  배포했다.
+- Wrangler production deployment 성공:
+  `https://ca-gelt-chatbot.three-rooms.workers.dev/`,
+  version `096eefd3-acbe-4a2e-9bba-d6989cad537f`.
+- fresh portal 확인에서 Kit, Kai, Hannah, Naveen 네 카드와 Hannah route가
+  응답했다. 공개 WebSocket handshake도 네 persona ID 모두 `ready`를
+  반환했다.
+
 ### 2026-09-20 — Weekly classroom AI-persona Google Sheets register
 
 - Added the separate Apps Script deployment source

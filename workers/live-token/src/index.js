@@ -1,10 +1,33 @@
-import kitSettings from "../../../prompts/deepgram_kit_code.json";
-import kaiSettings from "../../../prompts/deepgram_kai_code.json";
+import kitSettings from "../../../prompts/raw_materials/deepgram_kit_code.json";
+import kaiSettings from "../../../prompts/raw_materials/deepgram_kai_code.json";
+import hannahSettings from "../../../prompts/raw_materials/deepgram_Hannah_code.json";
+import naveenSettings from "../../../prompts/raw_materials/deepgram_Naveen_code.json";
+import kitPrompt from "./deployment-prompts/kit.txt";
+import kaiPrompt from "./deployment-prompts/kai.txt";
+import hannahPrompt from "./deployment-prompts/hannah.txt";
+import naveenPrompt from "./deployment-prompts/naveen.txt";
 
 const DEEPGRAM_AGENT_ENDPOINT = "https://agent.deepgram.com/v1/agent/converse";
 const TOKEN_ENDPOINT = "https://api.deepgram.com/v1/auth/grant";
 const AUDIO_FORMAT = { encoding: "linear16", sample_rate: 24000, container: "none" };
-const SETTINGS_BY_PERSONA = { deepgram_kit: kitSettings, deepgram_kai: kaiSettings };
+const LISTEN_MODEL = "flux-general-en";
+const THINK_MODEL = "gemini-3.1-flash-lite";
+
+function settingsFor(baseSettings, voiceModel, prompt) {
+  const settings = JSON.parse(JSON.stringify(baseSettings));
+  settings.agent.speak.provider = { type: "deepgram", version: "v2", model: voiceModel };
+  settings.agent.listen.provider = { type: "deepgram", version: "v2", model: LISTEN_MODEL };
+  settings.agent.think.provider = { type: "google", model: THINK_MODEL };
+  settings.agent.think.prompt = prompt;
+  return settings;
+}
+
+const SETTINGS_BY_PERSONA = {
+  deepgram_kit: settingsFor(kitSettings, "flux-kit-en", kitPrompt),
+  deepgram_kai: settingsFor(kaiSettings, "flux-kai-en", kaiPrompt),
+  deepgram_hannah: settingsFor(hannahSettings, "flux-hannah-en", hannahPrompt),
+  deepgram_naveen: settingsFor(naveenSettings, "flux-naveen-en", naveenPrompt),
+};
 
 function corsHeaders(request, env) {
   const requestOrigin = request.headers.get("Origin");

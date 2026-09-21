@@ -1540,6 +1540,16 @@ Part E: 메모/리스크 갱신
 - 변경 사항을 commit `71ea77b` (`Add Hannah and Naveen classroom personas`)로
   기록하고 `origin/master`에 push했다.
 
+### 2026-09-21 — Main portal persona-card layout
+
+- 메인 포털의 Kit/Kai 카드도 Hannah/Naveen과 동일하게 실제 profile image를
+  왼쪽에 배치하는 가로형 카드로 변경했다.
+- 현재 표시 순서는 `Kit → Kai → Hannah → Naveen`으로 고정했다.
+- 이후 persona 추가 시에도 동일한 portrait-card 구조를 사용하고,
+  monogram-only 카드로 되돌리지 않는다는 규칙을 기술보고서에 기록했다.
+- 이미지 asset은 persona identity의 증거가 아니라 fictionalized classroom
+  visual asset으로 취급한다.
+
 ### 2026-09-20 — Weekly classroom AI-persona Google Sheets register
 
 - Added the separate Apps Script deployment source

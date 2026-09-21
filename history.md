@@ -1526,6 +1526,20 @@ Part E: 메모/리스크 갱신
 - 따라서 Hannah와 Naveen의 3주차 persona 정보가 Google Sheet에 실제로
   추가된 것으로 기록한다.
 
+### 2026-09-21 — Classroom persona deployment verification and push
+
+- 실제 `.env.local` Deepgram credential로 `deepgram_hannah`와
+  `deepgram_naveen`의 Agent handshake를 각각 실행했다. 두 persona 모두
+  `ready`를 반환했고, voice model은 각각 `flux-hannah-en`과
+  `flux-naveen-en`으로 확인했다.
+- local WebSocket/static server smoke에서 `/`,
+  `/personas/deepgram-hannah/`, `/personas/deepgram-naveen/`이 모두 HTTP
+  200으로 응답했다.
+- 전체 Python test suite는 **57 passed**였고, JavaScript·Apps Script
+  syntax 및 JSON 검증도 통과했다.
+- 변경 사항을 commit `71ea77b` (`Add Hannah and Naveen classroom personas`)로
+  기록하고 `origin/master`에 push했다.
+
 ### 2026-09-20 — Weekly classroom AI-persona Google Sheets register
 
 - Added the separate Apps Script deployment source
